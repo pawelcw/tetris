@@ -10,6 +10,7 @@ window.onload = (event) => {
     GAME_STATE = 0;
     PAUSE_END = false;
     GAME_SCORE = 0;
+    GAME_SPEED =10;
     MOVE_BLOCK = 0;
 
     let blockLine = 0;
@@ -114,6 +115,7 @@ window.onload = (event) => {
         if (event.key == 'ArrowDown') {
             const id = checkDirection(3);
             let collision = blockCollision(activeBlock);
+ 
             if (!collision) {
                 if (activeBlock[id].y < 19) {
                     activeBlock.forEach(element => {
@@ -180,6 +182,9 @@ window.onload = (event) => {
                 })
             } else { }
 
+        }
+        if (event.key === 's'){
+            GAME_STATE = 1;
         }
     });
 
@@ -254,6 +259,17 @@ window.onload = (event) => {
         ctx.fillText("Press P to continue...", 125, 435);
         ctx.font = "50px Arial";
     };
+    function drawEnd(){
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.strokeStyle = "green";
+        ctx.strokeRect(50, 350, 300, 100);
+        ctx.font = "50px Arial ";
+        ctx.fillStyle = "green";
+        ctx.fillText("Koniec gry", 75, 415);
+        ctx.font = "16px Arial";
+        ctx.fillText("Press s to start...", 130, 435);
+        ctx.font = "50px Arial";
+    };
 
 
 
@@ -299,10 +315,20 @@ window.onload = (event) => {
                     BLOCK_COLOUR = 7; BLOCK_ID = 6;
                     break;
             }
+
             blockOrigin = [...activeBlock.map(x => ({
                 ...x
             }))]
+
+            activeBlock.forEach(element =>{
+                element.x +=3;
+            })
+                  
+                if(blockCollision(activeBlock)) {
+                    GAME_STATE = 2;
+                }
         }
+
     }
 
     function generateColour() {
@@ -425,15 +451,25 @@ window.onload = (event) => {
                 drawPause();
                 break;
             case 1:
-                console.log(GAME_STATE);
                 MOVE_BLOCK++;
-                if (MOVE_BLOCK === 10) {
-                    MOVE_BLOCK = 0;
+                if (MOVE_BLOCK === GAME_SPEED) {
+                    if(GAME_SCORE === 100 && GAME_SPEED === 10) {
+                        GAME_SPEED -=5;
+                    }
+                     MOVE_BLOCK = 0;
                     moveActiveBlock();
                 }
                 drawFields();
                 drawBoard();
                 checkLines();
+                break;
+            case 2: 
+                fieldsInit();
+                GAME_SCORE = 0;
+                drawEnd();
+                generateBlock();
+                GAME_SPEED = 10;
+                blockLine = 0;
                 break;
         }
 
