@@ -1,0 +1,25 @@
+body{
+    margin: 20 auto;
+    background-color: black;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: green;
+}
+
+
+h1{
+    padding-left:20px;
+}
+#game{
+    margin-top:50px;
+   
+}
+
+#game_canvas {
+    border: 4px solid;
+    border-radius: 5px;
+    border-image: linear-gradient(to right, darkblue, darkorchid) 1;
+    background: linear-gradient(to bottom, #181A31 0%, #6670E9 100%);
+}
