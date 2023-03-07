@@ -60,7 +60,9 @@ window.onload = (event) => {
                 duplicateBlock[i].y = blockOrigin[i].x + blockLine;
 
             }
-            collision = blockCollision();
+
+            collision = blockCollision(duplicateBlock);
+
             if (!collision) {
                 activeBlock = [...duplicateBlock.map(x => ({
                     ...x
@@ -111,7 +113,7 @@ window.onload = (event) => {
         }
         if (event.key == 'ArrowDown') {
             const id = checkDirection(3);
-            let collision = blockCollision();
+            let collision = blockCollision(activeBlock);
             if (!collision) {
                 if (activeBlock[id].y < 19) {
                     activeBlock.forEach(element => {
@@ -204,10 +206,10 @@ window.onload = (event) => {
             gameFields[element.x][element.y] = 1;
         })
     }
-    function blockCollision(number = 0) {
+    function blockCollision(array) {
         let collision = 0;
 
-        activeBlock.forEach(element => {
+        array.forEach(element => {
             if (gameFields[element.x][element.y + 1] === 1) {
 
                 collision = 1;
@@ -388,7 +390,7 @@ window.onload = (event) => {
     function moveActiveBlock() {
 
         const id = checkDirection(3);
-        let collision = blockCollision();
+        let collision = blockCollision(activeBlock);
 
         if (!collision) {
 
