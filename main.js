@@ -1,30 +1,29 @@
 window.onload = (event) => {
 
     const ctx = document.getElementById('game_canvas').getContext('2d'),
-    CANVAS_WIDTH = 400,
-    CANVAS_HEIGHT = 800;
+        CANVAS_WIDTH = 400,
+        CANVAS_HEIGHT = 800;
     BLOCK_COLOUR = 1, //default 
-    BLOCK_ID = 0,
-    BLOCK_ID = 8;
+        BLOCK_ID = 8;
     activeBlock = [{ x: 1, y: 1 }, { x: 0, y: 0 }];
     blockOrigin = [];
     GAME_STATE = 0;
     PAUSE_END = false;
     GAME_SCORE = 0;
+    MOVE_BLOCK = 0;
 
     let blockLine = 0;
     let gameFields = [];
-    let gameScore = document.querySelector('h1'); 
+    let gameScore = document.querySelector('h1');
 
-    let fields  = new Image();
-    fields.src ='field.png';
-''
+    let fields = new Image();
+    fields.src = 'field.png';
     const block = [];
 
 
-    for(let i = 0; i < 7;i++)  {
+    for (let i = 0; i < 7; i++) {
         block[i] = new Image();
-        block[i].src = 'block'+i+'.png';
+        block[i].src = 'block' + i + '.png';
     }
 
 
@@ -50,15 +49,27 @@ window.onload = (event) => {
     function blockRotate() {
         let x = getLastX();
         let y = getOriginX();
+        let collision;
+        let duplicateBlock = [...activeBlock.map(x => ({
+            ...x
+        }))]
         if (BLOCK_ID != 0) {
+
             for (let i = 0; i < activeBlock.length; i++) {
-                activeBlock[i].x = x - (activeBlock[i].y - blockLine);
-                activeBlock[i].y = blockOrigin[i].x + blockLine;
+                duplicateBlock[i].x = x - (duplicateBlock[i].y - blockLine);
+                duplicateBlock[i].y = blockOrigin[i].x + blockLine;
+
             }
-            for (let j = 0; j < blockOrigin.length; j++) {
-                const dx = blockOrigin[j].x;
-                blockOrigin[j].x = y - blockOrigin[j].y;
-                blockOrigin[j].y = dx;
+            collision = blockCollision();
+            if (!collision) {
+                activeBlock = [...duplicateBlock.map(x => ({
+                    ...x
+                }))]
+                for (let j = 0; j < blockOrigin.length; j++) {
+                    const dx = blockOrigin[j].x;
+                    blockOrigin[j].x = y - blockOrigin[j].y;
+                    blockOrigin[j].y = dx;
+                }
             }
         }
 
@@ -212,11 +223,11 @@ window.onload = (event) => {
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 20; j++) {
                 if (gameFields[i][j] === 1) {
-                
-              //  ctx.fillRect(CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20);
-              ctx.drawImage(fields,CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j);
-                } else { 
-                    ctx.clearRect(CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20) 
+
+                    //  ctx.fillRect(CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20);
+                    ctx.drawImage(fields, CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j);
+                } else {
+                    ctx.clearRect(CANVAS_WIDTH / 10 * i, CANVAS_HEIGHT / 20 * j, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20)
                 }
             }
 
@@ -224,7 +235,7 @@ window.onload = (event) => {
         generateColour();
         activeBlock.forEach(element => {
             // ctx.fillRect(CANVAS_WIDTH / 10 * element.x, CANVAS_HEIGHT / 20 * element.y, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20)
-            ctx.drawImage(block[BLOCK_ID],CANVAS_WIDTH / 10 * element.x,CANVAS_HEIGHT / 20 * element.y);
+            ctx.drawImage(block[BLOCK_ID], CANVAS_WIDTH / 10 * element.x, CANVAS_HEIGHT / 20 * element.y);
         })
         // blockOrigin.forEach(element =>{
         //     ctx.fillRect(CANVAS_WIDTH / 10 * element.x, CANVAS_HEIGHT / 20 * element.y, CANVAS_WIDTH / 10, CANVAS_HEIGHT / 20)
@@ -279,13 +290,14 @@ window.onload = (event) => {
                     break;
                 case 5:
                     activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 1 }];
-                    BLOCK_COLOUR = 6; BLOCK_ID = 5; 
+                    BLOCK_COLOUR = 6; BLOCK_ID = 5;
+                    break;
                 case 6:
                     activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 2, y: 0 }];
-                    BLOCK_COLOUR = 7; BLOCK_ID = 6; 
+                    BLOCK_COLOUR = 7; BLOCK_ID = 6;
                     break;
             }
-            blockOrigin =[...activeBlock.map(x => ({
+            blockOrigin = [...activeBlock.map(x => ({
                 ...x
             }))]
         }
@@ -322,7 +334,7 @@ window.onload = (event) => {
                     x++;
                 }
                 if (x === 10) {
-                    GAME_SCORE +=10;
+                    GAME_SCORE += 10;
                     for (let k = 0; k < 10; k++) { // kasownanie zapelnionej linijki
                         gameFields[k][i] = 0;
                     }
@@ -405,23 +417,26 @@ window.onload = (event) => {
 
     function gameLoop() {
 
-    gameScore.innerText = GAME_SCORE;
-    switch (GAME_STATE) {
-        case 0:
-            drawPause();
-            break;
-        case 1:
-
-        drawFields();
-          drawBoard();
-        checkLines();
-        break;
-    }
+        gameScore.innerText = GAME_SCORE;
+        switch (GAME_STATE) {
+            case 0:
+                drawPause();
+                break;
+            case 1:
+                console.log(GAME_STATE);
+                MOVE_BLOCK++;
+                if (MOVE_BLOCK === 10) {
+                    MOVE_BLOCK = 0;
+                    moveActiveBlock();
+                }
+                drawFields();
+                drawBoard();
+                checkLines();
+                break;
+        }
 
     };
     fieldsInit();
     generateBlock();
-
-            setInterval(gameLoop, 1000 / 15);   
-            setInterval(moveActiveBlock, 1000);
+    setInterval(gameLoop, 1000 / 15);
 }
