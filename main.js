@@ -96,6 +96,11 @@ window.onload = (event) => {
         })
         return x;
     }
+
+    document.addEventListener('touchstart', (event) => {
+        alert("dotknal");
+    });
+
     document.addEventListener('keydown', (event) => {
 
         if (event.key === "p") {
