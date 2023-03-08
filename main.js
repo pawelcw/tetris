@@ -115,29 +115,25 @@ window.onload = (event) => {
     });
 
     let mobileLeft = document.querySelector('#mobile_left');
-    mobile.addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        event.key ='arrowLeft';
+    mobile.addEventListener('touchstart', (event) => { 
+       document.event.key ='arrowLeft';
 
     });
 
     let mobileRight = document.querySelector('#mobile_right');
     mobile.addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        event.key ='arrowRight';
+       document.event.key ='arrowRight';
 
     });
     let mobiledDwn = document.querySelector('#mobile_down');
     mobile.addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        event.key ='arrowDown';
+        document.event.key ='arrowDown';
 
     });
 
     let mobiledUP = document.querySelector('#mobile_up');
     mobile.addEventListener('touchstart', (event) => {
-        event.preventDefault();
-        event.key ='arrowUp';
+        document. event.key ='arrowUp';
 
     });
 
