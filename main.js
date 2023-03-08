@@ -99,7 +99,7 @@ window.onload = (event) => {
 
     let mobile = document.querySelector('#mobile');   
     mobile.addEventListener('touchstart', (event) => {
-        
+        event.preventDefault();
         if (GAME_STATE != 1) 
         {
             GAME_STATE = 1;
@@ -118,6 +118,8 @@ window.onload = (event) => {
  
 
     document.addEventListener('keydown', (event) => {
+
+        event.preventDefault();
 
         if (event.key === "p") {
             if (GAME_STATE === 0) {
@@ -213,7 +215,7 @@ window.onload = (event) => {
 
     function drawBoard() {
         ctx.fillStyle = 'white';
-        ctx.strokeStyle = 'rgb(45, 45, 45)';
+        ctx.strokeStyle = 'rgb(9, 17, 9)';
         ctx.lineWidth = 0.5;
         for (let i = 0; i < 10; i++) {
             ctx.moveTo(CANVAS_WIDTH / 10 * i, 0);
@@ -275,9 +277,9 @@ window.onload = (event) => {
         ctx.strokeRect(50, 350, 300, 100);
         ctx.font = "50px Arial ";
         ctx.fillStyle = "green";
-        ctx.fillText("Pause", 125, 415);
+        ctx.fillText("Pause", 115, 415);
         ctx.font = "16px Arial";
-        ctx.fillText("Press P to continue...", 125, 435);
+        ctx.fillText("Press P to continue...", 115, 435);
         ctx.font = "50px Arial";
     };
     function drawEnd(){
