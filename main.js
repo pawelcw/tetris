@@ -10,11 +10,15 @@ window.onload = (event) => {
     GAME_STATE = 0;
     PAUSE_END = false;
     GAME_SCORE = 0;
-    GAME_SPEED =10;
+    GAME_SPEED = 10;
     MOVE_BLOCK = 0;
+    NEXT_BLOCK = 0;
+    IS_NEXT = 1;
+    tabBlocks = [];
 
     let blockLine = 0;
     let gameFields = [];
+    
     let gameScore = document.querySelector('h1');
 
     let fields = new Image();
@@ -96,31 +100,52 @@ window.onload = (event) => {
         })
         return x;
     }
-
-    let mobile = document.querySelector('#mobile');   
+  // MOBILKI 
+    let mobile = document.querySelector('#mobile');
     mobile.addEventListener('touchstart', (event) => {
         event.preventDefault();
-        if (GAME_STATE != 1) 
-        {
+        if (GAME_STATE != 1) {
             GAME_STATE = 1;
             mobile.value = 'TOUCHE TO PAUSE';
-        } 
-        else  
-        {
+        }
+        else {
             GAME_STATE = 0;
             mobile.value = 'TOUCHE TO PLAY';
         }
     });
-        
+
+    let mobileLeft = document.querySelector('#mobile_left');
+    mobile.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        event.key ='arrowLeft';
+
+    });
+
+    let mobileRight = document.querySelector('#mobile_right');
+    mobile.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        event.key ='arrowRight';
+
+    });
+    let mobiledDwn = document.querySelector('#mobile_down');
+    mobile.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        event.key ='arrowDown';
+
+    });
+
+    let mobiledUP = document.querySelector('#mobile_up');
+    mobile.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        event.key ='arrowUp';
+
+    });
 
 
 
- 
+
 
     document.addEventListener('keydown', (event) => {
-
-        event.preventDefault();
-
         if (event.key === "p") {
             if (GAME_STATE === 0) {
                 PAUSE_END = true;
@@ -138,7 +163,7 @@ window.onload = (event) => {
         if (event.key == 'ArrowDown') {
             const id = checkDirection(3);
             let collision = blockCollision(activeBlock);
- 
+
             if (!collision) {
                 if (activeBlock[id].y < 19) {
                     activeBlock.forEach(element => {
@@ -206,7 +231,7 @@ window.onload = (event) => {
             } else { }
 
         }
-        if (event.key === 's'){
+        if (event.key === 's') {
             GAME_STATE = 1;
         }
     });
@@ -277,12 +302,12 @@ window.onload = (event) => {
         ctx.strokeRect(50, 350, 300, 100);
         ctx.font = "50px Arial ";
         ctx.fillStyle = "green";
-        ctx.fillText("Pause", 115, 415);
+        ctx.fillText("Pause", 125, 405);
         ctx.font = "16px Arial";
-        ctx.fillText("Press P to continue...", 115, 435);
+        ctx.fillText("Press P to continue...", 125, 425);
         ctx.font = "50px Arial";
     };
-    function drawEnd(){
+    function drawEnd() {
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         ctx.strokeStyle = "green";
         ctx.strokeRect(50, 350, 300, 100);
@@ -294,7 +319,33 @@ window.onload = (event) => {
         ctx.font = "50px Arial";
     };
 
+    function showNextBlock() {
 
+        let i = 0;
+        let x;
+
+        if (IS_NEXT === 1) {
+            x = generateNumber(7);
+            tabBlocks[i] = x;
+            while (i < 3) {
+                if (x !=  tabBlocks[i]) {
+                    i++;
+                    tabBlocks[i] = x; 
+                          
+                }      
+                x = generateNumber(7);
+            }     
+        }
+        if (NEXT_BLOCK === 2) {
+            IS_NEXT = 1;
+            NEXT_BLOCK = 0;
+        } else{
+            NEXT_BLOCK = NEXT_BLOCK + 1;
+            IS_NEXT = 0;
+        }
+        console.log(tabBlocks[NEXT_BLOCK]);
+        return tabBlocks[NEXT_BLOCK];
+    }  
 
     function generateBlock() {
 
@@ -305,54 +356,54 @@ window.onload = (event) => {
         // 4 - kloecek l odwrocony
         // 5 - klocek z
         // 6 - klocek z odwrocony
-        let x = generateNumber(7);
         blockLine = 0;
-        if (x != BLOCK_ID) {
-            switch (x) {
-                case 0:
-                    activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 1 }];
-                    BLOCK_COLOUR = 1; BLOCK_ID = 0;
-                    break;
-                case 1:
-                    activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 }];
-                    BLOCK_COLOUR = 2; BLOCK_ID = 1;
-                    break;
-                case 2:
-                    activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 1, y: 1 }];
-                    BLOCK_COLOUR = 3; BLOCK_ID = 2;
-                    break;
-                case 3:
-                    activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 2, y: 0 }];
-                    BLOCK_COLOUR = 4; BLOCK_ID = 3;
-                    break;
-                case 4:
-                    activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 0, y: 0 }];
-                    BLOCK_COLOUR = 5; BLOCK_ID = 4;
-                    break;
-                case 5:
-                    activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 1 }];
-                    BLOCK_COLOUR = 6; BLOCK_ID = 5;
-                    break;
-                case 6:
-                    activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 2, y: 0 }];
-                    BLOCK_COLOUR = 7; BLOCK_ID = 6;
-                    break;
-            }
-
-            blockOrigin = [...activeBlock.map(x => ({
-                ...x
-            }))]
-
-            activeBlock.forEach(element =>{
-                element.x +=3;
-            })
-                  
-                if(blockCollision(activeBlock)) {
-                    GAME_STATE = 2;
-                }
+        let x = showNextBlock();
+    
+        switch (x) {
+            case 0:
+                activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 1 }];
+                BLOCK_COLOUR = 1; BLOCK_ID = 0;
+                break;
+            case 1:
+                activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 }];
+                BLOCK_COLOUR = 2; BLOCK_ID = 1;
+                break;
+            case 2:
+                activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 1, y: 1 }];
+                BLOCK_COLOUR = 3; BLOCK_ID = 2;
+                break;
+            case 3:
+                activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 2, y: 0 }];
+                BLOCK_COLOUR = 4; BLOCK_ID = 3;
+                break;
+            case 4:
+                activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 0, y: 0 }];
+                BLOCK_COLOUR = 5; BLOCK_ID = 4;
+                break;
+            case 5:
+                activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 1 }];
+                BLOCK_COLOUR = 6; BLOCK_ID = 5;
+                break;
+            case 6:
+                activeBlock = [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 2, y: 0 }];
+                BLOCK_COLOUR = 7; BLOCK_ID = 6;
+                break;
         }
 
+        blockOrigin = [...activeBlock.map(x => ({
+            ...x
+        }))]
+
+        activeBlock.forEach(element => {
+            element.x += 3;
+        })
+
+        if (blockCollision(activeBlock)) {
+            GAME_STATE = 2;
+        }
     }
+
+
 
     function generateColour() {
 
@@ -476,17 +527,17 @@ window.onload = (event) => {
             case 1:
                 MOVE_BLOCK++;
                 if (MOVE_BLOCK === GAME_SPEED) {
-                    if(GAME_SCORE === 100 && GAME_SPEED === 10) {
-                        GAME_SPEED -=5;
+                    if (GAME_SCORE === 100 && GAME_SPEED === 10) {
+                        GAME_SPEED -= 5;
                     }
-                     MOVE_BLOCK = 0;
+                    MOVE_BLOCK = 0;
                     moveActiveBlock();
                 }
                 drawFields();
                 drawBoard();
                 checkLines();
                 break;
-            case 2: 
+            case 2:
                 fieldsInit();
                 GAME_SCORE = 0;
                 drawEnd();
