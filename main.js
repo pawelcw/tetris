@@ -97,9 +97,25 @@ window.onload = (event) => {
         return x;
     }
 
-    document.addEventListener('touchstart', (event) => {
-        alert("dotknal");
+    let mobile = document.querySelector('#mobile');   
+    mobile.addEventListener('touchstart', (event) => {
+        
+        if (GAME_STATE != 1) 
+        {
+            GAME_STATE = 1;
+            mobile.value = 'TOUCHE TO PAUSE';
+        } 
+        else  
+        {
+            GAME_STATE = 0;
+            mobile.value = 'TOUCHE TO PLAY';
+        }
     });
+        
+
+
+
+ 
 
     document.addEventListener('keydown', (event) => {
 
