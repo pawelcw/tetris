@@ -180,31 +180,48 @@ window.onload = (event) => {
 
     function moveDown() {
         const id = checkDirection(3);
-        let collision = blockCollision(activeBlock);
-
-        if (!collision) {
-            if (activeBlock[id].y < 19) {
-                activeBlock.forEach(element => {
-                    gameFields[element.x][element.y] = 0;
+        let ghostBlock = [...activeBlock.map(x => ({
+            ...x
+        }))]
+        let collision; 
+        for(let i = ghostBlock[id].y;i < 19;i++){
+            ghostBlock.forEach(element => {
+                if(!collision && element.y < 19) {
                     element.y++;
-
-                })
-                blockLine++;
-            } else {
-                activeBlock.forEach(element => {
-                    gameFields[element.x][element.y] = 1;
-                })
-                generateBlock();
-
-            }
-        } else {
-            activeBlock.forEach(element => {
-                gameFields[element.x][element.y] = 1;
+                } else {
+                    ghostBlock.forEach(element => {
+                        gameFields[element.x][element.y] = 1;
+                        generateBlock();
+                    })
+                }
             })
-            generateBlock();
-
-
+            if(ghostBlock[id].y === 19) {
+                ghostBlock.forEach(element => {
+                        gameFields[element.x][element.y] = 1;
+                        generateBlock();
+                    })
+            }
+            collision =  blockCollision(ghostBlock);
+              
         }
+        
+        // collision = blockCollision(activeBlock);
+        // if (!collision) {
+        //     if (activeBlock[id].y < 19) {
+        //         activeBlock.forEach(element => {
+        //             gameFields[element.x][element.y] = 0;
+        //             element.y++;
+
+        //         })
+        //         blockLine++;
+        //     } else {
+        //         activeBlock.forEach(element => {
+        //             gameFields[element.x][element.y] = 1;
+        //         })
+        //         generateBlock();
+
+        //     }
+        // }
 
     }
 
