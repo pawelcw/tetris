@@ -18,7 +18,7 @@ window.onload = (event) => {
 
     let blockLine = 0;
     let gameFields = [];
-    
+
     let gameScore = document.querySelector('h1');
 
     let fields = new Image();
@@ -100,9 +100,9 @@ window.onload = (event) => {
         })
         return x;
     }
-  // MOBILKI 
+    // MOBILKI 
     let mobile = document.querySelector('#mobile');
-    mobile.addEventListener('touchstart', (event) => {
+    mobile.addEventListener('click', (event) => {
         event.preventDefault();
         if (GAME_STATE != 1) {
             GAME_STATE = 1;
@@ -115,31 +115,98 @@ window.onload = (event) => {
     });
 
     let mobileLeft = document.querySelector('#mobile_left');
-    mobile.addEventListener('click', (event) => { 
-        blockRotate();
+    mobileLeft.addEventListener('click', (event) => {
+        moveLeft();
     });
 
     let mobileRight = document.querySelector('#mobile_right');
-    mobileRight.addEventListener('touchstart', (event) => {
+    mobileRight.addEventListener('click', (event) => {
 
-
+        moveRight();
     });
     let mobileDown = document.querySelector('#mobile_down');
-  
-    mobileDown.addEventListener('touchstart', (event) => {
 
-
+    mobileDown.addEventListener('click', (event) => {
+        moveDown();
     });
 
 
     let mobileUp = document.querySelector('#mobile_up');
-    mobileUp.addEventListener('touchstart', (event) => {
+    mobileUp.addEventListener('click', (event) => {
         blockRotate();
-        alert("up")
 
     });
+    function moveRight() {
+        const id = checkDirection(2);
+        let x = 0;
+        activeBlock.forEach(element => {
+            if (element.x + 1 < 9) {
+                if (gameFields[element.x + 1][element.y] === 1) {
+                    x = 1;
+                }
+            }
+        })
+        if (activeBlock[id].x < 9 && x === 0) {
+            activeBlock.forEach(element => {
+                // gameFields[element.x][element.y] = 0;
+                element.x++;
+            })
+        } else { }
+
+    }
+
+    function moveLeft() {
+
+        const id = checkDirection(1);
+        let x = 0;
+
+        activeBlock.forEach(element => {
+            if (element.x > 1) {
+                if (gameFields[element.x - 1][element.y] === 1) {
+                    x = 1;
+
+                }
+            }
+        })
+
+        if (activeBlock[id].x > 0 && x === 0) {
+            activeBlock.forEach(element => {
+                // gameFields[element.x][element.y] = 0;
+                element.x--;
+            })
+        } else { }
+
+    };
+
+    function moveDown() {
+        const id = checkDirection(3);
+        let collision = blockCollision(activeBlock);
+
+        if (!collision) {
+            if (activeBlock[id].y < 19) {
+                activeBlock.forEach(element => {
+                    gameFields[element.x][element.y] = 0;
+                    element.y++;
+
+                })
+                blockLine++;
+            } else {
+                activeBlock.forEach(element => {
+                    gameFields[element.x][element.y] = 1;
+                })
+                generateBlock();
+
+            }
+        } else {
+            activeBlock.forEach(element => {
+                gameFields[element.x][element.y] = 1;
+            })
+            generateBlock();
 
 
+        }
+
+    }
 
 
 
@@ -159,74 +226,17 @@ window.onload = (event) => {
 
         }
         if (event.key == 'ArrowDown') {
-            const id = checkDirection(3);
-            let collision = blockCollision(activeBlock);
-
-            if (!collision) {
-                if (activeBlock[id].y < 19) {
-                    activeBlock.forEach(element => {
-                        gameFields[element.x][element.y] = 0;
-                        element.y++;
-
-                    })
-                    blockLine++;
-                } else {
-                    activeBlock.forEach(element => {
-                        gameFields[element.x][element.y] = 1;
-                    })
-                    generateBlock();
-
-                }
-            } else {
-                activeBlock.forEach(element => {
-                    gameFields[element.x][element.y] = 1;
-                })
-                generateBlock();
-
-
-            }
+            moveDown();
 
         }
 
         if (event.key == 'ArrowLeft') {
-
-            const id = checkDirection(1);
-            let x = 0;
-
-            activeBlock.forEach(element => {
-                if (element.x > 1) {
-                    if (gameFields[element.x - 1][element.y] === 1) {
-                        x = 1;
-
-                    }
-                }
-            })
-
-            if (activeBlock[id].x > 0 && x === 0) {
-                activeBlock.forEach(element => {
-                    // gameFields[element.x][element.y] = 0;
-                    element.x--;
-                })
-            } else { }
+            moveLeft();
 
         }
 
         if (event.key == 'ArrowRight') {
-            const id = checkDirection(2);
-            let x = 0;
-            activeBlock.forEach(element => {
-                if (element.x + 1 < 9) {
-                    if (gameFields[element.x + 1][element.y] === 1) {
-                        x = 1;
-                    }
-                }
-            })
-            if (activeBlock[id].x < 9 && x === 0) {
-                activeBlock.forEach(element => {
-                    // gameFields[element.x][element.y] = 0;
-                    element.x++;
-                })
-            } else { }
+           moveRight();
 
         }
         if (event.key === 's') {
@@ -326,24 +336,24 @@ window.onload = (event) => {
             x = generateNumber(7);
             tabBlocks[i] = x;
             while (i < 3) {
-                if (x !=  tabBlocks[i]) {
+                if (x != tabBlocks[i]) {
                     i++;
-                    tabBlocks[i] = x; 
-                          
-                }      
+                    tabBlocks[i] = x;
+
+                }
                 x = generateNumber(7);
-            }     
+            }
         }
         if (NEXT_BLOCK === 2) {
             IS_NEXT = 1;
             NEXT_BLOCK = 0;
-        } else{
+        } else {
             NEXT_BLOCK = NEXT_BLOCK + 1;
             IS_NEXT = 0;
         }
         console.log(tabBlocks[NEXT_BLOCK]);
         return tabBlocks[NEXT_BLOCK];
-    }  
+    }
 
     function generateBlock() {
 
@@ -356,7 +366,7 @@ window.onload = (event) => {
         // 6 - klocek z odwrocony
         blockLine = 0;
         let x = showNextBlock();
-    
+
         switch (x) {
             case 0:
                 activeBlock = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 1 }];
