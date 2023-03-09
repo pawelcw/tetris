@@ -115,7 +115,7 @@ window.onload = (event) => {
     });
 
     let mobileLeft = document.querySelector('#mobile_left');
-    mobile.addEventListener('touchstart', (event) => { 
+    mobileLeft.addEventListener('touchstart', (event) => { 
         const id = checkDirection(1);
         let x = 0;
 
@@ -138,7 +138,7 @@ window.onload = (event) => {
     });
 
     let mobileRight = document.querySelector('#mobile_right');
-    mobile.addEventListener('touchstart', (event) => {
+    mobileRight.addEventListener('touchstart', (event) => {
         const id = checkDirection(2);
         let x = 0;
         activeBlock.forEach(element => {
@@ -156,8 +156,8 @@ window.onload = (event) => {
         } else { }
 
     });
-    let mobiledDwn = document.querySelector('#mobile_down');
-    mobile.addEventListener('touchstart', (event) => {
+    let mobileDown = document.querySelector('#mobile_down');
+    mobileDown.addEventListener('touchstart', (event) => {
         const id = checkDirection(3);
         let collision = blockCollision(activeBlock);
 
@@ -187,8 +187,8 @@ window.onload = (event) => {
 
     });
 
-    let mobiledUP = document.querySelector('#mobile_up');
-    mobile.addEventListener('touchstart', (event) => {
+    let mobileUp = document.querySelector('#mobile_up');
+    mobileUp.addEventListener('touchstart', (event) => {
         blockRotate();
 
     });
