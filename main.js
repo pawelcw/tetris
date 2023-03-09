@@ -116,24 +116,80 @@ window.onload = (event) => {
 
     let mobileLeft = document.querySelector('#mobile_left');
     mobile.addEventListener('touchstart', (event) => { 
-       document.event.key ='arrowLeft';
+        const id = checkDirection(1);
+        let x = 0;
+
+        activeBlock.forEach(element => {
+            if (element.x > 1) {
+                if (gameFields[element.x - 1][element.y] === 1) {
+                    x = 1;
+
+                }
+            }
+        })
+
+        if (activeBlock[id].x > 0 && x === 0) {
+            activeBlock.forEach(element => {
+                // gameFields[element.x][element.y] = 0;
+                element.x--;
+            })
+        } else { }
 
     });
 
     let mobileRight = document.querySelector('#mobile_right');
     mobile.addEventListener('touchstart', (event) => {
-       document.event.key ='arrowRight';
+        const id = checkDirection(2);
+        let x = 0;
+        activeBlock.forEach(element => {
+            if (element.x + 1 < 9) {
+                if (gameFields[element.x + 1][element.y] === 1) {
+                    x = 1;
+                }
+            }
+        })
+        if (activeBlock[id].x < 9 && x === 0) {
+            activeBlock.forEach(element => {
+                // gameFields[element.x][element.y] = 0;
+                element.x++;
+            })
+        } else { }
 
     });
     let mobiledDwn = document.querySelector('#mobile_down');
     mobile.addEventListener('touchstart', (event) => {
-        document.event.key ='arrowDown';
+        const id = checkDirection(3);
+        let collision = blockCollision(activeBlock);
+
+        if (!collision) {
+            if (activeBlock[id].y < 19) {
+                activeBlock.forEach(element => {
+                    gameFields[element.x][element.y] = 0;
+                    element.y++;
+
+                })
+                blockLine++;
+            } else {
+                activeBlock.forEach(element => {
+                    gameFields[element.x][element.y] = 1;
+                })
+                generateBlock();
+
+            }
+        } else {
+            activeBlock.forEach(element => {
+                gameFields[element.x][element.y] = 1;
+            })
+            generateBlock();
+
+
+        }
 
     });
 
     let mobiledUP = document.querySelector('#mobile_up');
     mobile.addEventListener('touchstart', (event) => {
-        document. event.key ='arrowUp';
+        blockRotate();
 
     });
 
