@@ -115,7 +115,8 @@ window.onload = (event) => {
     });
 
     let mobileLeft = document.querySelector('#mobile_left');
-    mobile.addEventListener('touchstart', (event) => { 
+    mobile.addEventListener('click', (event) => { 
+        blockRotate();
     });
 
     let mobileRight = document.querySelector('#mobile_right');
