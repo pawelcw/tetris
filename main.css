@@ -2,7 +2,7 @@ body{
     margin: 20 auto;
     background-color: black;
     display:flex;
-    flex-direction: row;
+    flex-direction: columns;
     align-items: center;
     justify-content: center;
     color: green;
